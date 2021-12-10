@@ -148,6 +148,11 @@ class MimeTypes:
             base, ext = posixpath.splitext(base)
         else:
             encoding = None
+        types_map = _types_map_default
+        if ext in types_map:
+            # prefer the python-internal values over /etc/mime.types
+            # quickfix for https://bugs.python.org/issue46035
+            return types_map[ext], encoding
         types_map = self.types_map[True]
         if ext in types_map:
             return types_map[ext], encoding
